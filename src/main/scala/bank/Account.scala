@@ -2,9 +2,11 @@ package bank
 
 import java.time.LocalDate
 
-case class Account(transfers: List[Deposit] = List.empty) {
-  def makeATransfer(deposit: Deposit) = Account(this.transfers :+ deposit)
+case class Account(transfers: List[Transfer] = List.empty) {
+  def makeATransfer(transfer: Transfer) = Account(this.transfers :+ transfer)
 }
 
-case class Deposit(amount: Int, date: LocalDate)
+sealed trait Transfer
+case class Deposit(amount: Int, date: LocalDate) extends Transfer
+case class WithDraw(amount: Int, date: LocalDate) extends Transfer
 
