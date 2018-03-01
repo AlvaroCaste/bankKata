@@ -22,4 +22,10 @@ class AccountTest extends FlatSpec with Matchers {
       .makeATransfer(anotherDeposit)
       .transfers should contain allOf (deposit1000, anotherDeposit)
   }
+
+  it should "be able to make a withdraw of 500 on 14-01-2012" in {
+    val anotherDate = LocalDate.of(2012, 1, 14)
+    val withdraw = WithDraw(500, anotherDate)
+    account.makeATransfer(withdraw).transfers should contain (withdraw)
+  }
 }
