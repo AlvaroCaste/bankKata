@@ -25,4 +25,19 @@ class AccountTest extends FlatSpec with Matchers {
   it should "be able to make a withdraw of 500 on 14-01-2012" in {
     account.makeATransfer(withdraw500).transfers should contain (withdraw500)
   }
+
+  it should "print her bank statement" in {
+    val statement =
+      """
+        |date || credit || debit || balance
+        |14/01/2012 || || 500.00 || 2500.00
+        |13/01/2012 || 2000.00 || || 3000.00
+        |10/01/2012 || 1000.00 || || 1000.00
+      """.stripMargin
+    account
+      .makeATransfer(deposit1000)
+      .makeATransfer(deposit2000)
+      .makeATransfer(withdraw500)
+      .statement shouldBe statement
+  }
 }
