@@ -7,25 +7,22 @@ import org.scalatest.{FlatSpec, Matchers}
 class AccountTest extends FlatSpec with Matchers {
 
   val account = Account()
-  val date = LocalDate.of(2012, 1, 10)
-  val deposit1000 = Deposit(1000, date)
+  val deposit1000 = Deposit(1000, LocalDate.of(2012, 1, 10))
+  val deposit2000 = Deposit(2000, LocalDate.of(2012, 1, 13))
+  val withdraw500 = WithDraw(500, LocalDate.of(2012, 1, 14))
 
   "A client" should "be able to make a deposit of 1000 on 10-01-2012" in {
     account.makeATransfer(deposit1000).transfers should contain (deposit1000)
   }
 
   it should "be able to make another deposit of 2000 on 13-01-2012" in {
-    val anotherDate = LocalDate.of(2012, 1, 13)
-    val anotherDeposit = Deposit(2000, anotherDate)
     account
       .makeATransfer(deposit1000)
-      .makeATransfer(anotherDeposit)
-      .transfers should contain allOf (deposit1000, anotherDeposit)
+      .makeATransfer(deposit2000)
+      .transfers should contain allOf (deposit1000, deposit2000)
   }
 
   it should "be able to make a withdraw of 500 on 14-01-2012" in {
-    val anotherDate = LocalDate.of(2012, 1, 14)
-    val withdraw = WithDraw(500, anotherDate)
-    account.makeATransfer(withdraw).transfers should contain (withdraw)
+    account.makeATransfer(withdraw500).transfers should contain (withdraw500)
   }
 }
