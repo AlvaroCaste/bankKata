@@ -26,12 +26,12 @@ class AccountTest extends FlatSpec with Matchers {
     account.makeATransfer(withdraw500).transfers should contain (withdraw500)
   }
 
-  it should "be able to get total amount" in {
+  it should "be able to get balance" in {
     account
       .makeATransfer(deposit1000)
       .makeATransfer(deposit2000)
       .makeATransfer(withdraw500)
-      .total shouldBe 2500
+      .balance shouldBe 2500
   }
 
   it should "print her bank statement when is empty" in {
