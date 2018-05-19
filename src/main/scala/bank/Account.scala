@@ -7,22 +7,20 @@ import bank.Account.printTransfer
 
 case class Account(transfers: List[Transfer] = List.empty) {
   def makeATransfer(transfer: Transfer) = Account(this.transfers :+ transfer)
-  def balance: Int = transfers.map {
-    case Deposit(amount, _) ⇒ amount
-    case WithDraw(amount, _) ⇒ -amount
-  }.sum
-  def sortedByDateAsc = transfers.sortWith((x, y) ⇒ x.date isAfter y.date)
-  def sortedByDateDesc = transfers.sortWith((x, y) ⇒ x.date isBefore y.date)
+  def balance: Int = transfers.map(amount).sum
+  def statement: String =
+    s"date || credit || debit || balance${if (transfers.isEmpty) "" else printLine}"
 
+  private def printLine = {
+    val transfersSorted = transfers.sorted
+    val balances = transfersSorted.map(amount).scanLeft(0)(_ + _).tail
+    (transfersSorted zip balances).map{case (t, b) ⇒ printTransfer(t, b)}.reverse.mkString("\n", "\n", "")
+  }
   private def amount(t: Transfer) = t match {
     case Deposit(amount, _) ⇒ amount
     case WithDraw(amount, _) ⇒ -amount
   }
-  def statement: String =
-    s"date || credit || debit || balance${if (transfers.isEmpty) "" else printLine}"
-  private def printLine = sortedByDateDesc.zip(sortedByDateDesc.map(amount).scanLeft(0)(_ + _).tail)
-    .sortWith((x, y) ⇒ x._1.date isAfter y._1.date).map(t ⇒ printTransfer(t._1, t._2))
-    .mkString("\n", "\n", "")
+  private implicit def sortDescByDate: Ordering[Transfer] = _.date compareTo _.date
 }
 
 object Account {
@@ -33,7 +31,6 @@ object Account {
       case Deposit(_, _) ⇒ s"$date || $amount || || $balance.00"
       case WithDraw(_, _) ⇒ s"$date || || $amount || $balance.00"
     }
-
   }
 }
 
