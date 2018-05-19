@@ -34,6 +34,13 @@ class AccountTest extends FlatSpec with Matchers {
       .balance shouldBe 2500
   }
 
+  it should "be able to get transfers sorted by date asc" in {
+    account
+      .makeATransfer(deposit1000)
+      .makeATransfer(deposit2000)
+      .makeATransfer(withdraw500)
+      .sortedByDate shouldBe List(withdraw500, deposit2000, deposit1000)
+  }
   it should "print her bank statement when is empty" in {
     val emptyStatement = "date || credit || debit || balance"
     account.statement shouldBe emptyStatement
