@@ -39,7 +39,7 @@ class AccountTest extends FlatSpec with Matchers {
       .makeATransfer(deposit1000)
       .makeATransfer(deposit2000)
       .makeATransfer(withdraw500)
-      .sortedByDate shouldBe List(withdraw500, deposit2000, deposit1000)
+      .sortedByDateAsc shouldBe List(withdraw500, deposit2000, deposit1000)
   }
   it should "print her bank statement when is empty" in {
     val emptyStatement = "date || credit || debit || balance"
@@ -51,8 +51,7 @@ class AccountTest extends FlatSpec with Matchers {
       """date || credit || debit || balance
         |14/01/2012 || || 500.00 || 2500.00
         |13/01/2012 || 2000.00 || || 3000.00
-        |10/01/2012 || 1000.00 || || 1000.00
-      """.stripMargin
+        |10/01/2012 || 1000.00 || || 1000.00""".stripMargin
     account
       .makeATransfer(deposit1000)
       .makeATransfer(deposit2000)
