@@ -8,10 +8,14 @@ case class Account(transfers: List[Transfer] = List.empty) {
     case Deposit(amount, _) ⇒ amount
     case WithDraw(amount, _) ⇒ -amount
   }.sum
+  def sortedByDate = transfers.sortWith((x, y) ⇒ x.date isAfter y.date)
   def statement: String = "date || credit || debit || balance"
 }
 
-sealed trait Transfer
+sealed trait Transfer {
+  val amount: Int
+  val date: LocalDate
+}
 case class Deposit(amount: Int, date: LocalDate) extends Transfer
 case class WithDraw(amount: Int, date: LocalDate) extends Transfer
 
